@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Ice Cream</title>
+
+<style>
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    width:350px;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+}
+button{
+    width:100%;
+    padding:10px;
+    background:#ff4d6d;
+    color:white;
+    border:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<h2>🍦 Order Ice Cream</h2>
+<p id="welcome"></p>
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
+<input id="phone" placeholder="Phone">
+<input id="address" placeholder="Address">
+
+<select id="icecream">
+    <option value="">Select Ice Cream</option>
+    <option>Choco Vanilla Duo Cups</option>
+    <option>Classic Waffle Cone Delight</option>
+    <option>Strawberry & Mango Twin Cups</option>
+    <option>Vanilla Scoop Classic</option>
+    <option>Chocolate Bowl Treat</option>
+    <option>Strawberry Fresh Scoop</option>
+    <option>Chocolate Fudge Bliss</option>
+    <option>Mango Magic Scoop</option>
+    <option>Strawberry Delight</option>
+    <option>Oreo Crunch Cream</option>
+    <option>Vanilla Caramel Swirl</option>
+    <option>Butterscotch Crunch</option>
+    <option>Black Currant Twist</option>
+    <option>Pista Royal Cream</option>
+
+</select>
+<label>Number of Scoops</label>
+<input id="scoops" type="number" value="1" min="1">
+<label>Quantity (No. of Ice Creams)</label>
+<input id="qty" type="number" value="1" min="1">
+<!-- ✅ TOTAL DISPLAY -->
+<button onclick="placeOrder()">Submit Order</button>
+
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/cart.js"></script>
+
+<script src="js/app.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+window.onload = function () {
+
+    let user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+
+        document.getElementById("welcome").innerText =
+            "👋 Welcome back, " + user.name + "!";
+
+        document.getElementById("name").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("phone").value = user.phone || "";
+
+        document.getElementById("name").readOnly = true;
+        document.getElementById("email").readOnly = true;
+        document.getElementById("phone").readOnly = true;
+
+    } else {
+
+        document.getElementById("welcome").innerText =
+            "👤 Welcome Guest! Please fill your details.";
+    }
+};
+</script>
+
+</body>
+</html>
+
+
+

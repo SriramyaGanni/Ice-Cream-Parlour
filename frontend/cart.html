@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Cart</title>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<style>
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#f6d365,#fda085);
+    margin:0;
+}
+
+.header{
+    background:#ff4d6d;
+    color:white;
+    padding:20px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.container-box{
+    max-width:900px;
+    margin:30px auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.15);
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    border-bottom:1px solid #eee;
+}
+
+.cart-item:hover{
+    background:#fff5f7;
+}
+
+.item-name{
+    font-weight:bold;
+    color:#333;
+}
+
+.item-price{
+    color:#ff4d6d;
+    font-weight:bold;
+}
+
+.remove-btn{
+    background:#ff4d6d;
+    color:white;
+    border:none;
+    padding:5px 10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.remove-btn:hover{
+    background:#e60039;
+}
+
+.total-box{
+    text-align:right;
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.checkout-btn{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    background:#ff4d6d;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.checkout-btn:hover{
+    background:#e60039;
+}
+
+.empty{
+    text-align:center;
+    color:#555;
+    padding:40px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    🛒 Your Ice Cream Cart
+</div>
+
+<div class="container-box">
+
+<div id="cart-items"></div>
+
+<div class="total-box">
+    Total: ₹<span id="total">0</span>
+</div>
+
+<button class="checkout-btn" onclick="checkout()">Proceed to Order</button>
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+function renderCart(){
+    let html = "";
+    let total = 0;
+
+    if(cart.length === 0){
+        html = "<div class='empty'>Your cart is empty 🍦</div>";
+        document.getElementById("cart-items").innerHTML = html;
+        document.getElementById("total").innerText = 0;
+        return;
+    }
+
+    cart.forEach((item,index)=>{
+        html += `
+        <div class="cart-item">
+            <div>
+                <div class="item-name">${item.name}</div>
+                <div class="item-price">₹${item.price}</div>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        </div>
+        `;
+        total += item.price;
+    });
+
+    document.getElementById("cart-items").innerHTML = html;
+    document.getElementById("total").innerText = total;
+}
+
+function removeItem(index){
+    cart.splice(index,1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function checkout(){
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if(cart.length === 0){
+        alert("Cart is empty!");
+        return;
+    }
+
+    // send cart to order page
+    localStorage.setItem("orderCart", JSON.stringify(cart));
+
+    window.location.href = "order.html";
+}
+renderCart();
+
+</script>
+
+</body>
+</html>

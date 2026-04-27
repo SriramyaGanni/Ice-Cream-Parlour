@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Customer Login</title>
+
+<style>
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    width:350px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2{
+    color:#ff4d6d;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:95%;
+    padding:12px;
+    background:#ff4d6d;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#e63950;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>🍦 Customer Login</h2>
+
+<input type="text" id="name" placeholder="Full Name">
+<input type="email" id="email" placeholder="Email">
+<input type="text" id="phone" placeholder="Phone Number">
+
+<button onclick="login()">Continue</button>
+
+</div>
+
+<script>
+function login(){
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+
+    if(!name || !email || !phone){
+        alert("Please fill all details");
+        return;
+    }
+
+    // save user properly
+    let user = { name, email, phone };
+
+    localStorage.setItem("user", JSON.stringify(user));
+
+    window.location.href = "order.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<style>
+body{
+    font-family: Arial;
+    margin:0;
+    background:#f4f6f9;
+}
+
+.header{
+    background:#2c3e50;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+
+.container{
+    padding:20px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap:15px;
+}
+
+.card{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.name{
+    font-size:18px;
+    font-weight:bold;
+    color:#2c3e50;
+}
+
+.info{
+    font-size:14px;
+    color:#555;
+    margin:5px 0;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    background:#ff4d6d;
+    color:white;
+    border-radius:20px;
+    font-size:12px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h2>📦 Ice Cream Orders Dashboard</h2>
+</div>
+
+<div class="container" id="orders"></div>
+
+<script>
+async function loadOrders(){
+
+    const res = await fetch("http://localhost:3000/orders");
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(o=>{
+        html += `
+        <div class="card">
+            <div class="name">${o.name}</div>
+            <div class="info">📧 ${o.email}</div>
+            <div class="info">📱 ${o.phone}</div>
+            <div class="info">🏠 ${o.address}</div>
+            <div class="info">🍦 ${o.icecream}</div>
+            <div class="badge">Qty: ${o.quantity}</div>
+        </div>
+        `;
+    });
+
+    document.getElementById("orders").innerHTML = html;
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>

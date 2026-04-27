@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>More Ice Creams</title>
+
+   <link rel="stylesheet" href="css/bootstrap.min.css">
+
+   <style>
+   body{
+      background:#f8f9fa;
+      font-family:'Roboto', sans-serif;
+   }
+
+   .section-title{
+      text-align:center;
+      padding:30px;
+      color:#ff4d6d;
+      font-weight:bold;
+   }
+
+   /* CARD SAME AS ICECREAM PAGE */
+   .cream_box{
+      background:#fff;
+      border-radius:15px;
+      padding:15px;
+      text-align:center;
+      margin-bottom:25px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      transition:0.3s;
+   }
+
+   .cream_box:hover{
+      transform:translateY(-5px);
+   }
+
+   .cream_img img{
+      width:100%;
+      height:180px;
+      object-fit:contain;
+   }
+
+   .price_text{
+      font-weight:bold;
+      font-size:18px;
+      margin:10px 0;
+      color:#000;
+   }
+
+   .strawberry_text{
+      font-size:16px;
+      font-weight:600;
+      margin-bottom:10px;
+   }
+
+   .cart_bt button{
+      background:#ff4d6d;
+      color:white;
+      border:none;
+      padding:8px 15px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:14px;
+   }
+
+   .cart_bt button:hover{
+      background:#e63950;
+   }
+
+   </style>
+</head>
+
+<body>
+
+<h2 class="section-title">🍨 Explore More Ice Creams</h2>
+
+<div class="container">
+   <div class="row">
+
+      <!-- ITEM 1 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-7.jpg">
+            </div>
+            <div class="price_text">₹150</div>
+            <h6 class="strawberry_text">Chocolate Fudge Bliss</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Chocolate Fudge Bliss',150)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+
+      <!-- ITEM 2 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-8.jpg">
+            </div>
+            <div class="price_text">₹120</div>
+            <h6 class="strawberry_text">Mango Magic Scoop</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Mango Magic Scoop',120)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+
+      <!-- ITEM 3 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-9.jpg">
+            </div>
+            <div class="price_text">₹130</div>
+            <h6 class="strawberry_text">Strawberry Delight</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Strawberry Delight',130)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+
+      <!-- ITEM 4 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-10.png">
+            </div>
+            <div class="price_text">₹160</div>
+            <h6 class="strawberry_text">Oreo Crunch Cream</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Oreo Crunch Cream',160)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+
+      <!-- ITEM 5 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-11.jpg">
+            </div>
+            <div class="price_text">₹140</div>
+            <h6 class="strawberry_text">Vanilla Caramel Swirl</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Vanilla Caramel Swirl',140)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+
+      <!-- ITEM 6 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-12.jpg">
+            </div>
+            <div class="price_text">₹150</div>
+            <h6 class="strawberry_text">Butterscotch Crunch</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Butterscotch Crunch',150)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+      <!-- ITEM 7 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-13.jpg">
+            </div>
+            <div class="price_text">₹135</div>
+            <h6 class="strawberry_text">Black Currant Twist</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Black Currant Twist',135)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+      <!-- ITEM 7 -->
+      <div class="col-md-4">
+         <div class="cream_box">
+            <div class="cream_img">
+               <img src="images/img-14.jpg">
+            </div>
+            <div class="price_text">₹155</div>
+            <h6 class="strawberry_text">Pista Royal Cream</h6>
+            <div class="cart_bt">
+               <button onclick="addToCart('Pista Royal Cream',155)">Add To Cart</button>
+            </div>
+         </div>
+      </div>
+
+   </div>
+</div>
+
+<div style="text-align:center; margin:30px;">
+   <a href="icecream.html">⬅ Back to Menu</a>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/cart.js"></script>
+
+</body>
+</html>
