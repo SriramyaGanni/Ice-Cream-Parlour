@@ -42,7 +42,7 @@ pipeline {
         stage('Upload to Nexus') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'Nexus-creds',
+                    credentialsId: 'nexus-creds',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
@@ -56,21 +56,21 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}:latest")
-                }
+                sh 'docker build -t sriramyaganni/icecreams-website:latest .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([
+                withCredentials([usernamePassword(
                     credentialsId: 'docker-creds',
-                    url: 'https://index.docker.io/v1/'
-                ]) {
-                    script {
-                        docker.image("${DOCKER_IMAGE}:latest").push()
-                    }
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker push sriramyaganni/icecreams-website:latest
+                    '''
                 }
             }
         }
