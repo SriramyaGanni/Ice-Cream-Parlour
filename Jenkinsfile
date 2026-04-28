@@ -40,24 +40,24 @@ pipeline {
                 sh 'zip -r app.zip .'
             }
         }
-
-          stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube') {
-                    withCredentials([string(credentialsId: 'Sonarqube', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                         sh '''
+                        which sonar-scanner
+                        sonar-scanner -v
                         sonar-scanner \
                         -Dsonar.projectKey=icecream-parlour \
                         -Dsonar.projectName="Ice Cream Parlour" \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://43.204.96.214:9000 \
+                        -Dsonar.host.url=http://13.126.177.201:9000 \
                         -Dsonar.login=$SONAR_TOKEN
                         '''
-                    }
-                }
-            }
-        }
-
+                      }
+                  }
+              }
+          }
         stage('Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
