@@ -34,7 +34,14 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+
+        stage('Package') {
+            steps {
+                sh 'zip -r app.zip .'
+            }
+        }
+
+          stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube') {
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
@@ -56,12 +63,6 @@ pipeline {
                 timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
-            }
-        }
-
-        stage('Package') {
-            steps {
-                sh 'zip -r app.zip .'
             }
         }
 
