@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "sriramyaganni/icecreams-website"
         NEXUS_URL = "http://13.126.177.201:8081"
+        SONARQUBE_ENV = "SonarQube"
     }
 
     stages {
@@ -21,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Install') {
+        stage('Install Dependencies') {
             steps {
                 sh 'npm ci'
             }
@@ -30,6 +31,31 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'npm test || true'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Sonarqube') {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                        sonar-scanner \
+                        -Dsonar.projectKey=icecream-parlour \
+                        -Dsonar.projectName="Ice Cream Parlour" \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://13.126.177.201:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
@@ -56,7 +82,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t sriramyaganni/icecreams-website:latest .'
+                sh "docker build -t $DOCKER_IMAGE:latest ."
             }
         }
 
@@ -69,7 +95,7 @@ pipeline {
                 )]) {
                     sh '''
                     echo $PASS | docker login -u $USER --password-stdin
-                    docker push sriramyaganni/icecreams-website:latest
+                    docker push $DOCKER_IMAGE:latest
                     '''
                 }
             }
