@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+
+  frontend:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/usr/share/nginx/html
+
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/icecream
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
