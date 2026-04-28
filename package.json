@@ -1,4 +1,6 @@
 {
+  "name": "ice-cream-parlour",
+  "version": "1.0.0",
   "dependencies": {
     "mongoose": "^9.5.0"
   }
