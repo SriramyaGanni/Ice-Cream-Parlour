@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "sriramyaganni/icecreams-website"
-        NEXUS_URL = "http://13.126.177.201:8081"
+        NEXUS_URL = "http://43.204.96.214:8081"
         SONARQUBE_ENV = "Sonarqube"
     }
 
@@ -44,13 +44,13 @@ pipeline {
           stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube') {
-                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'Sonarqube', variable: 'SONAR_TOKEN')]) {
                         sh '''
                         sonar-scanner \
                         -Dsonar.projectKey=icecream-parlour \
                         -Dsonar.projectName="Ice Cream Parlour" \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://13.126.177.201:9000 \
+                        -Dsonar.host.url=http://43.204.96.214:9000 \
                         -Dsonar.login=$SONAR_TOKEN
                         '''
                     }
