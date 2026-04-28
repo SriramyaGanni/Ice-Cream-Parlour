@@ -51,7 +51,7 @@ pipeline {
                         -Dsonar.projectKey=icecream-parlour \
                         -Dsonar.projectName="Ice Cream Parlour" \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://13.126.177.201:9000 \
+                        -Dsonar.host.url=http://43.204.96.214:9000 \
                         -Dsonar.login=$SONAR_TOKEN
                         '''
                       }
