@@ -42,7 +42,7 @@ pipeline {
         stage('Upload to Nexus') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'nexus-creds',
+                    credentialsId: 'Nexus-creds',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
