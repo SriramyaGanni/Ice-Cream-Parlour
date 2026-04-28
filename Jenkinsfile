@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "sriramyaganni/icecreams-website"
         NEXUS_URL = "http://13.126.177.201:8081"
-        SONARQUBE_ENV = "SonarQube"
+        SONARQUBE_ENV = "Sonarqube"
     }
 
     stages {
