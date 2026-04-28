@@ -83,7 +83,7 @@ pipeline {
                 )]) {
                     sh '''
                     export KUBECONFIG=$KUBECONFIG
-                    kubectl apply -f k8s/
+                    kubectl apply -f Deployment.yml
                     kubectl get pods
                     kubectl get svc
                     '''
