@@ -16,6 +16,10 @@ pipeline {
 
         ARTIFACT = "app.zip"
         IMAGE_TAG = "${BUILD_NUMBER}"
+
+    }
+    tools {
+    jdk 'java21'
     }
 
     stages {
