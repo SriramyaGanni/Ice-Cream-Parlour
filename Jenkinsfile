@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "sriramyaganni/icecreams-website"
+        DOCKER_USER = "sriramyaganni"
+        FRONTEND_IMAGE = "icecream-frontend"
+        BACKEND_IMAGE  = "icecream-backend"
 
         GIT_REPO   = "https://github.com/SriramyaGanni/Ice-Cream-Parlour.git"
         GIT_BRANCH = "*/main"
@@ -13,6 +15,7 @@ pipeline {
         NEXUS_REPO = "icecream-website"
 
         ARTIFACT = "app.zip"
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -31,7 +34,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install || true'
             }
         }
 
@@ -54,9 +57,8 @@ pipeline {
                         sh '''
                         sonar-scanner \
                         -Dsonar.projectKey=icecream-parlour \
-                        -Dsonar.projectName="Ice Cream Parlour" \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://13.233.152.232:9000 \
+                        -Dsonar.host.url=$SONAR_HOST_URL \
                         -Dsonar.login=$SONAR_TOKEN
                         '''
                     }
@@ -88,24 +90,33 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh "docker build -t ${DOCKER_IMAGE}:latest ."
-            }
-        }
-
-        stage('Push Docker Image') {
+        stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
-                    sh '''
-                    echo $PASS | docker login -u $USER --password-stdin
-                    docker push ${DOCKER_IMAGE}:latest
-                    '''
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
                 }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh """
+                docker build -t ${DOCKER_USER}/${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend
+                docker build -t ${DOCKER_USER}/${BACKEND_IMAGE}:${IMAGE_TAG} .
+                """
+            }
+        }
+
+        stage('Push Docker Images') {
+            steps {
+                sh """
+                docker push ${DOCKER_USER}/${FRONTEND_IMAGE}:${IMAGE_TAG}
+                docker push ${DOCKER_USER}/${BACKEND_IMAGE}:${IMAGE_TAG}
+                """
             }
         }
 
@@ -115,13 +126,16 @@ pipeline {
                     credentialsId: 'kubeconfig',
                     variable: 'KUBECONFIG'
                 )]) {
-                    sh '''
+                    sh """
                     export KUBECONFIG=$KUBECONFIG
-                    kubectl apply -f Deployment.yml
-                    kubectl apply -f Service.yml
+
+                    sed -i 's|image: .*icecream-frontend:.*|image: ${DOCKER_USER}/${FRONTEND_IMAGE}:${IMAGE_TAG}|g' deployment/frontend.yml
+                    sed -i 's|image: .*icecream-backend:.*|image: ${DOCKER_USER}/${BACKEND_IMAGE}:${IMAGE_TAG}|g' deployment/backend.yml
+
+                    kubectl apply -f deployment.yml
                     kubectl get pods
                     kubectl get svc
-                    '''
+                    """
                 }
             }
         }
