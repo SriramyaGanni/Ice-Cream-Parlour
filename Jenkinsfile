@@ -11,7 +11,7 @@ pipeline {
 
         SONAR_ENV = "Sonarqube"
 
-        NEXUS_URL  = "http://13.233.152.232:8081"
+        NEXUS_URL  = "http://localhost:8081"
         NEXUS_REPO = "icecream-website"
 
         ARTIFACT = "app.zip"
@@ -128,10 +128,8 @@ pipeline {
                 )]) {
                     sh """
                     export KUBECONFIG=$KUBECONFIG
-
-                    sed -i 's|image: .*icecream-frontend:.*|image: ${DOCKER_USER}/${FRONTEND_IMAGE}:${IMAGE_TAG}|g' deployment/frontend.yml
-                    sed -i 's|image: .*icecream-backend:.*|image: ${DOCKER_USER}/${BACKEND_IMAGE}:${IMAGE_TAG}|g' deployment/backend.yml
-
+                    sed -i 's|${DOCKER_USER}/icecream-frontend:.*|${DOCKER_USER}/${FRONTEND_IMAGE}:${IMAGE_TAG}|g' deployment.yml
+                    sed -i 's|${DOCKER_USER}/icecream-backend:.*|${DOCKER_USER}/${BACKEND_IMAGE}:${IMAGE_TAG}|g' deployment.yml
                     kubectl apply -f deployment.yml
                     kubectl get pods
                     kubectl get svc
