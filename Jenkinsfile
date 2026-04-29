@@ -9,8 +9,8 @@ pipeline {
 
         SONAR_ENV = "Sonarqube"
 
-        NEXUS_URL  = "http://43.204.96.214:8081"
-        NEXUS_REPO = "task-manager-artifacts"
+        NEXUS_URL  = "http://13.233.152.232:8081"
+        NEXUS_REPO = "icecream-website"
 
         ARTIFACT = "app.zip"
     }
@@ -56,7 +56,7 @@ pipeline {
                         -Dsonar.projectKey=icecream-parlour \
                         -Dsonar.projectName="Ice Cream Parlour" \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=http://43.204.96.214:9000 \
+                        -Dsonar.host.url=http://13.233.152.232:9000 \
                         -Dsonar.login=$SONAR_TOKEN
                         '''
                     }
