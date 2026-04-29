@@ -1,42 +1,4 @@
-# ---------------- FRONTEND ----------------
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: frontend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: icecream
-      tier: frontend
-  template:
-    metadata:
-      labels:
-        app: icecream
-        tier: frontend
-    spec:
-      containers:
-        - name: frontend
-          image: nginx
-          ports:
-            - containerPort: 80
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: icecream
-    tier: frontend
-  ports:
-    - port: 80
-      targetPort: 80
-
 # ---------------- BACKEND ----------------
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,11 +17,11 @@ spec:
     spec:
       containers:
         - name: backend
-          image: sriramyaganni/icecreams-website
+          image: sriramyaganni/icecreams-website:latest
           ports:
             - containerPort: 3000
           env:
-            - name: MONGO_URL
+            - name: MONGO_URI
               value: "mongodb://mongo:27017/icecream"
 
 ---
@@ -68,13 +30,14 @@ kind: Service
 metadata:
   name: backend-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: icecream
     tier: backend
   ports:
-    - port: 3000
+    - port: 80
       targetPort: 3000
+
 
 # ---------------- MONGO ----------------
 ---
