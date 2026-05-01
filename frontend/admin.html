@@ -71,7 +71,7 @@ body{
 <script>
 async function loadOrders(){
 
-    const res = await fetch("http://localhost:3000/orders");
+    const res = await fetch("http://localhost:3001/api/orders");
     const data = await res.json();
 
     let html = "";

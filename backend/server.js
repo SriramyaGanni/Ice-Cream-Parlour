@@ -1,10 +1,29 @@
 require("node:dns").setDefaultResultOrder("ipv4first");
-require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 const path = require("node:path");
+const fs = require("node:fs");
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+
+// Load env from backend/.env first; fallback to project root .env
+const envCandidates = [
+    path.join(__dirname, ".env"),
+    path.join(__dirname, "..", ".env"),
+    path.join(__dirname, "..", "..", ".env")
+];
+
+for (const envPath of envCandidates) {
+    if (fs.existsSync(envPath)) {
+        dotenv.config({ path: envPath });
+        break;
+    }
+}
+
+let isMongoConnected = false;
+const fallbackOrders = [];
+const fallbackContacts = [];
 
 const app = express();
 
@@ -23,10 +42,13 @@ if (!process.env.MONGO_URI) {
 }
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB Connected Successfully 🍃"))
+    .then(() => {
+        isMongoConnected = true;
+        console.log("MongoDB Connected Successfully 🍃");
+    })
     .catch(err => {
         console.error("MongoDB Connection Failed ❌", err);
-        process.exit(1);
+        console.warn("⚠️ Running in fallback mode (in-memory storage)");
     });
 
 // ================================
@@ -62,10 +84,20 @@ app.post("/api/order", async (req, res) => {
             });
         }
 
-        const newOrder = new Order(req.body);
-        await newOrder.save();
+        let savedOrder;
+        if (isMongoConnected) {
+            const newOrder = new Order(req.body);
+            savedOrder = await newOrder.save();
+        } else {
+            savedOrder = {
+                _id: new mongoose.Types.ObjectId(),
+                ...req.body,
+                createdAt: new Date()
+            };
+            fallbackOrders.push(savedOrder);
+        }
 
-        console.log("✅ Order saved:", newOrder._id);
+        console.log("✅ Order saved:", savedOrder._id);
 
         return res.status(201).json({
             message: "Order placed successfully"
@@ -107,10 +139,20 @@ app.post("/api/contact", async (req, res) => {
             });
         }
 
-        const newContact = new Contact(req.body);
-        await newContact.save();
+        let savedContact;
+        if (isMongoConnected) {
+            const newContact = new Contact(req.body);
+            savedContact = await newContact.save();
+        } else {
+            savedContact = {
+                _id: new mongoose.Types.ObjectId(),
+                ...req.body,
+                createdAt: new Date()
+            };
+            fallbackContacts.push(savedContact);
+        }
 
-        console.log("📩 Contact saved:", newContact._id);
+        console.log("📩 Contact saved:", savedContact._id);
 
         return res.status(201).json({
             message: "Message sent successfully"
@@ -129,7 +171,9 @@ app.post("/api/contact", async (req, res) => {
 // ================================
 app.get("/api/orders", async (req, res) => {
     try {
-        const orders = await Order.find().sort({ createdAt: -1 });
+        const orders = isMongoConnected
+            ? await Order.find().sort({ createdAt: -1 })
+            : [...fallbackOrders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         return res.json(orders);
     } catch (error) {
         console.error("Fetch Orders Error:", error);

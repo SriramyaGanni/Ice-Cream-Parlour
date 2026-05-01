@@ -332,7 +332,7 @@ function sendMessage() {
         return;
     }
 
-    fetch("http://localhost:3000/contact", {
+    fetch("http://localhost:3001/api/contact", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

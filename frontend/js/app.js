@@ -53,7 +53,7 @@ async function placeOrder() {
     }
 
     try {
-        const res = await fetch("/api/order", {
+        const res = await fetch("http://localhost:3001/api/order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -95,7 +95,7 @@ async function sendMessage() {
     }
 
     try {
-        const res = await fetch("/api/contact", {
+        const res = await fetch("http://localhost:3001/api/contact", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
